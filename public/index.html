@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contador de Palavras</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Contador de Palavras</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="arquivo" id="arquivo" accept=".txt" required />
+      <button type="submit">Contar Palavras</button>
+    </form>
+    <div id="resultado"></div>
+  </div>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const formData = new FormData();
+      const arquivo = document.getElementById('arquivo').files[0];
+
+      formData.append('arquivo', arquivo);
+
+      try {
+        const response = await fetch('/contar', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.text();
+        document.getElementById('resultado').innerText = result;
+      } catch (error) {
+        document.getElementById('resultado').innerText = 'Erro ao contar as palavras.';
+      }
+    });
+  </script>
+</body>
+</html>
